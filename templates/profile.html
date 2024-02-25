@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .profile-header {
+            background-color: #f2f2f2;
+            width: 100%;
+            text-align: center;
+            padding: 20px;
+            font-size: 24px;
+        }
+        .profile-info {
+            width: 80%; /* Adjust based on preference */
+            margin: 20px 0;
+        }
+        .profile-photo {
+            width: 120px;
+            height: 120px;
+            background-color: #ccc;
+            border-radius: 60px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 16px;
+        }
+        .info-field {
+            background-color: #f0f0f0;
+            padding: 10px;
+            margin: 10px 0;
+            display: flex;
+            justify-content: space-between;
+        }
+        .info-label {
+            font-weight: bold;
+        }
+        .footer {
+            width: 100%;
+            position: fixed;
+            bottom: 0;
+            display: flex;
+            justify-content: space-around;
+            background-color: #f8f8f8;
+            border-top: 1px solid #ccc;
+            padding: 10px 0;
+        }
+        .footer a {
+            text-decoration: none;
+            color: black;
+        }
+    </style>
+</head>
+<body>
+    <div class="profile-header">Profile</div>
+    <div class="profile-photo">Photo</div>
+    <div class="profile-info">
+        <div class="info-field"><span class="info-label">Name:</span> <span>User Name</span></div>
+        <div class="info-field"><span class="info-label">Title / Role:</span> <span>Position</span></div>
+        <div class="info-field"><span class="info-label">Location:</span> <span>City, Country</span></div>
+        <div class="info-field"><span class="info-label">Email:</span> <span>user@example.com</span></div>
+        <div class="info-field"><span class="info-label">Phone:</span> <span>123-456-7890</span></div>
+        <div class="info-field"><span class="info-label">LinkedIn:</span> <span>linkedin.com/in/username</span></div>
+        <div class="info-field"><span class="info-label">Portfolio:</span> <span>portfolio.com/username</span></div>
+        <div class="info-field"><span class="info-label">University & Major:</span> <span>University, Major</span></div>
+    </div>
+    <div class="footer">
+        <a href="/search">Search</a>
+        <a href="/applications">Applications</a>
+        <a href="/chat">Chat</a>
+        <a href="/profile">Profile</a>
+    </div>
+</body>
+</html>

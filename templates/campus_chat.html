@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campus Chat</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh; /* Ensure the page covers the full height */
+        }
+        .header, .search-bar {
+            padding: 10px;
+            background-color: #f2f2f2;
+            text-align: center;
+        }
+        .chat-tabs {
+            display: flex;
+            justify-content: space-around;
+            background-color: #ddd;
+            margin-top: 10px;
+        }
+        .chat-tabs div {
+            flex-grow: 1;
+            text-align: center;
+            padding: 10px;
+            cursor: pointer;
+        }
+        .chat-tabs .active {
+            background-color: #ccc;
+        }
+        .chat-section {
+            flex-grow: 1; /* Allow chat section to fill available space */
+            height: auto; /* Adjust based on content */
+            overflow-y: scroll;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+        .footer {
+            width: 100%;
+            position: fixed; /* Fix footer to the bottom */
+            bottom: 0;
+            display: flex;
+            justify-content: space-around;
+            background-color: #f8f8f8; /* Match your theme */
+            border-top: 1px solid #ccc;
+            padding: 10px 0;
+        }
+        .footer a {
+            text-decoration: none;
+            color: black;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">Campus Chat</div>
+    <div class="search-bar">
+        <input type="text" placeholder="Search..." style="width: 80%; padding: 10px;">
+    </div>
+    <div class="chat-tabs">
+        <div class="active">DM's</div>
+        <div>Chat's</div>
+    </div>
+    <div class="chat-section">
+        <!-- Chat content will go here -->
+    </div>
+    <div class="footer">
+        <a href="/search">Search</a>
+        <a href="/applications">Applications</a>
+        <a href="/chat">Chat</a>
+        <a href="/profile">Profile</a>
+    </div>
+</body>
+</html>
