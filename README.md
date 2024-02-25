@@ -10,4 +10,5 @@ Find user stories [here](user_stories.md)
 
 ## Task boards
 [Sprint 1 Task Board] (https://github.com/orgs/software-students-spring2024/projects/16/views/1)
+
 [Sprint 2 Task Board] (https://github.com/orgs/software-students-spring2024/projects/17/views/1)
