@@ -49,13 +49,13 @@ def login():
         
         if action == 'signin' and email == 'admin@example.com' and password == 'admin':
             # Redirect to the home page upon successful login - need database interaction added
-            return redirect(url_for('search'))
+            return redirect(url_for('/search'))
         elif action == 'signup':
-            return redirect(url_for('register'))
+            return redirect(url_for('/register'))
         else:
             error = 'Invalid credentials'
     return render_template('login.html', error=error)
-i
+
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
