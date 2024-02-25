@@ -11,43 +11,48 @@
             padding: 0;
             display: flex;
             flex-direction: column;
-            min-height: 100vh; /* Ensure the page covers the full height */
+            min-height: 100vh;
         }
         .header, .search-bar {
             padding: 10px;
             background-color: #f2f2f2;
             text-align: center;
         }
-        .chat-tabs {
+        .search-bar {
             display: flex;
-            justify-content: space-around;
-            background-color: #ddd;
-            margin-top: 10px;
+            justify-content: center;
+            align-items: center;
+            max-width: 100%; 
         }
-        .chat-tabs div {
-            flex-grow: 1;
-            text-align: center;
+        .search-bar input {
+            width: 80%; 
             padding: 10px;
-            cursor: pointer;
+            margin-right: 10px; 
+            border: 1px solid #ccc;
         }
-        .chat-tabs .active {
-            background-color: #ccc;
+        .search-bar button {
+            padding: 10px 20px; 
+            background-color: #4CAF50;
+            color: white; 
+            border: none;
+            border-radius: 5px; 
+            cursor: pointer;
+            white-space: nowrap;
         }
         .chat-section {
-            flex-grow: 1; /* Allow chat section to fill available space */
-            height: auto; /* Adjust based on content */
-            overflow-y: scroll;
-            margin: 10px 0;
+            flex-grow: 1;
+            overflow-y: auto;
+            margin: 10px;
             border: 1px solid #ccc;
             padding: 10px;
         }
         .footer {
             width: 100%;
-            position: fixed; /* Fix footer to the bottom */
+            position: fixed; 
             bottom: 0;
             display: flex;
             justify-content: space-around;
-            background-color: #f8f8f8; /* Match your theme */
+            background-color: #f8f8f8; 
             border-top: 1px solid #ccc;
             padding: 10px 0;
         }
@@ -60,11 +65,8 @@
 <body>
     <div class="header">Campus Chat</div>
     <div class="search-bar">
-        <input type="text" placeholder="Search..." style="width: 80%; padding: 10px;">
-    </div>
-    <div class="chat-tabs">
-        <div class="active">DM's</div>
-        <div>Chat's</div>
+        <input type="text" placeholder="Search...">
+        <button type="button">Search</button>
     </div>
     <div class="chat-section">
         <!-- Chat content will go here -->
