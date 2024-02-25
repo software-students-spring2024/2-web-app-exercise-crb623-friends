@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Internships</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .banner {
+            width: 100%;
+            background-color: #f2f2f2; 
+            color: black; 
+            text-align: center;
+            padding: 10px 0;
+            font-size: 24px; 
+        }
+        .search-bar {
+            margin: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .search-bar input[type=text] {
+            padding: 10px;
+            margin-right: 10px;
+            width: 300px; 
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        .search-bar button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .internship-list {
+            width: 90%;
+        }
+        .internship-item {
+            border: 1px solid #ccc;
+            margin-bottom: 20px;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .internship-item img {
+            width: 50px;
+            height: 50px; 
+            float: left;
+            margin-right: 10px;
+        }
+        .footer {
+            width: 100%;
+            position: fixed;
+            bottom: 0;
+            display: flex;
+            justify-content: space-around;
+            background-color: #f8f8f8;
+            border-top: 1px solid #ccc;
+            padding: 10px 0;
+        }
+        .footer a {
+            text-decoration: none;
+            color: black;
+        }
+        .clear { clear: both; }
+    </style>
+</head>
+<body>
+    <div class="banner">Search Internships</div>
+    <div class="search-bar">
+        <input type="text" placeholder="Search internships...">
+        <button>Search</button>
+    </div>
+    <div class="internship-list">
+        <!-- Internship items will be listed here -->
+    </div>
+    <div class="footer">
+        <a href="/search">Search</a>
+        <a href="/applications">Applications</a>
+        <a href="/chat">Chat</a>
+        <a href="/profile">Profile</a>
+    </div>
+</body>
+</html>
