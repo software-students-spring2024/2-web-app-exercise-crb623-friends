@@ -22,7 +22,18 @@
             font-size: 24px; 
         }
         .filter-bar {
+            width: 90%;
             margin-top: 20px;
+            text-align: right;
+        }
+        .filter-button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
         }
         .applications-list {
             width: 90%; 
@@ -52,6 +63,9 @@
 </head>
 <body>
     <div class="banner">Current Applications</div>
+    <div class="filter-bar">
+        <button class="filter-button">Filter</button>
+    </div>
     <div class="applications-list">
         <div class="application-item">
             <div><strong>Internship Title - Company Name</strong></div>
