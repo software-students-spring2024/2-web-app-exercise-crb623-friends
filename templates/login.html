@@ -68,6 +68,9 @@
         <div class="btn-container">
             <button onclick="location.href='/register'">Sign Up</button>
         </div>
+        {% if error %}
+            <p style="color:red;">{{ error }}</p>
+        {% endif %}
     </div>
 </body>
 </html>
