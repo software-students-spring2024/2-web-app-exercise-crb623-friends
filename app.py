@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, redirect, url_for
+from flask import Flask, request, render_template, redirect, url_for, flash
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
@@ -63,7 +63,7 @@ def register():
         email = request.form['email']
         password = request.form['password']
         flash('Registration successful!', 'success')
-        return redirect(url_for('home')) 
+        return redirect(url_for('search')) 
     return render_template('register.html')
 
 @app.route('/search', methods=['GET', 'POST'])
