@@ -20,15 +20,29 @@
             padding: 20px;
             font-size: 24px;
         }
+        .profile-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .edit-btn {
+            padding: 5px 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
         .profile-info {
-            width: 80%; /* Adjust based on preference */
+            width: 90%; 
             margin: 20px 0;
         }
         .profile-photo {
-            width: 120px;
-            height: 120px;
+            width: 100px;
+            height: 100px;
             background-color: #ccc;
-            border-radius: 60px;
+            border-radius: 50%;
             margin: 0 auto;
             display: flex;
             justify-content: center;
@@ -40,10 +54,12 @@
             padding: 10px;
             margin: 10px 0;
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
+            align-items: start;
         }
         .info-label {
             font-weight: bold;
+            margin-bottom: 5px;
         }
         .footer {
             width: 100%;
@@ -58,12 +74,31 @@
         .footer a {
             text-decoration: none;
             color: black;
+            font-size: 14px;
+        }
+        @media screen and (max-width: 600px) {
+            .profile-header, .profile-info, .footer {
+                padding: 10px;
+            }
+            .profile-header {
+                font-size: 20px;
+            }
+            .edit-btn {
+                padding: 5px;
+                font-size: 14px;
+            }
+            .info-field {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
 <body>
     <div class="profile-header">Profile</div>
-    <div class="profile-photo">Photo</div>
+    <div class="profile-container">
+        <div class="profile-photo">Photo</div>
+        <button class="edit-btn">Edit Profile</button>
+    </div>
     <div class="profile-info">
         <div class="info-field"><span class="info-label">Name:</span> <span>User Name</span></div>
         <div class="info-field"><span class="info-label">Title / Role:</span> <span>Position</span></div>
