@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apply for Internship</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        .internship-info, .application-form {
+            margin-bottom: 20px;
+        }
+        .internship-info h2, .internship-info p {
+            margin: 0;
+            margin-bottom: 10px;
+        }
+        .application-form label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .application-form input, .application-form textarea {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+        .application-form button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="internship-info">
+        <h2>Apply for {{ internship.title }}</h2>
+        <p><strong>Company:</strong> {{ internship.company_name }}</p>
+        <p><strong>Location:</strong> {{ internship.location }}</p>
+        <p><strong>Duration:</strong> {{ internship.duration }}</p>
+        <p>{{ internship.description }}</p>
+    </div>
+
+    <div class="application-form">
+        <form action="" method="POST">
+            <label for="name">Your Name:</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="email">Your Email:</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="resume">Upload Resume:</label>
+            <input type="file" id="resume" name="resume" required>
+
+            <label for="cover_letter">Cover Letter:</label>
+            <textarea id="cover_letter" name="cover_letter" rows="6" required></textarea>
+
+            <button type="submit">Submit Application</button>
+        </form>
+    </div>
+</body>
+</html>

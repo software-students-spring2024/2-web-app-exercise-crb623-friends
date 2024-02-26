@@ -54,12 +54,6 @@
             padding: 10px;
             border-radius: 5px;
         }
-        .internship-item img {
-            width: 50px;
-            height: 50px; 
-            float: left;
-            margin-right: 10px;
-        }
         .footer {
             width: 100%;
             position: fixed;
@@ -84,8 +78,20 @@
         <button>Search</button>
     </div>
     <div class="internship-list">
-        <!-- Internship items will be listed here -->
-    </div>
+        {% for internship in internships %}
+            <div class="internship-item">
+                <div>
+                    <h3>{{ internship.title }}</h3>
+                    <p>Company: {{ internship.company_name }}</p>
+                    <p>Location: {{ internship.location }}</p>
+                    <p>Duration: {{ internship.duration }}</p>
+                    <p>{{ internship.description }}</p>
+                    <button onclick="location.href='/apply/{{ internship.id }}'" class="apply-button">Click to Apply</button>
+                </div>
+                <div class="clear"></div>
+            </div>
+        {% endfor %}
+    </div>    
     <div class="footer">
         <a href="/search">Search</a>
         <a href="/applications">Applications</a>
