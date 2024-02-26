@@ -11,13 +11,14 @@
             padding: 0;
             display: flex;
             flex-direction: column;
+            min-height: 100vh;
             align-items: center;
         }
         .profile-header {
             background-color: #f2f2f2;
             width: 100%;
             text-align: center;
-            padding: 20px;
+            padding: 10px 0;
             font-size: 24px;
         }
         .profile-container {
@@ -61,9 +62,12 @@
             font-weight: bold;
             margin-bottom: 5px;
         }
+        .profile-container, .profile-info {
+            flex: 1;
+        }
         .footer {
             width: 100%;
-            position: fixed;
+            position: static;
             bottom: 0;
             display: flex;
             justify-content: space-around;
@@ -103,10 +107,8 @@
         <div class="info-field"><span class="info-label">Name:</span> <span>User Name</span></div>
         <div class="info-field"><span class="info-label">University & Major:</span> <span>University, Major</span></div>
         <div class="info-field"><span class="info-label">Email:</span> <span>user@example.com</span></div>
-        <div class="info-field"><span class="info-label">Phone:</span> <span>123-456-7890</span></div>
         <div class="info-field"><span class="info-label">LinkedIn:</span> <span>linkedin.com/in/username</span></div>
         <div class="info-field"><span class="info-label">Portfolio:</span> <span>portfolio.com/username</span></div>
-        <div class="info-field"><span class="info-label">University & Major:</span> <span>University, Major</span></div>
     </div>
     <div class="footer">
         <a href="/search">Search</a>
