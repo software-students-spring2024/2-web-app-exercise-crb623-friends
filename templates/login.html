@@ -44,7 +44,7 @@
         }
         .btn-container {
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
         }
         .btn-container button {
             width: 48%;
@@ -62,10 +62,15 @@
             <input type="password" placeholder="Enter Password" name="password" required>
 
             <div class="btn-container">
-                <button type="submit" name="action" value="signup">Sign Up</button>
                 <button type="submit" name="action" value="signin">Sign In</button>
             </div>
         </form>
+        <div class="btn-container">
+            <button onclick="location.href='/register'">Sign Up</button>
+        </div>
+        {% if error %}
+            <p style="color:red;">{{ error }}</p>
+        {% endif %}
     </div>
 </body>
 </html>
