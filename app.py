@@ -68,14 +68,28 @@ def register():
 
 @app.route('/search', methods=['GET', 'POST'])
 def search():
-    # Search functionality
     if request.method == 'POST':
         search_query = request.form.get('search', '')  
         filtered_internships = [internship for internship in internships if search_query.lower() in internship['title'].lower()]
         return render_template('search.html', internships=filtered_internships, search_query=search_query)
     else:
         return render_template('search.html', internships=internships, search_query='')
+
+@app.route('/apply/<int:internship_id>', methods=['GET', 'POST'])
+def apply(internship_id):
+    internship = next((item for item in internships if item["id"] == internship_id), None)
     
+    if not internship:
+        flash('Internship not found.', 'error')
+        return redirect(url_for('search'))
+    
+    if request.method == 'POST':
+        flash('Application submitted successfully!', 'success')
+        return redirect(url_for('applications')) 
+    
+    return render_template('apply.html', internship=internship)
+
+
 @app.route('/applications')
 def applications():
     # Mock data until MongoDB database implemented
