@@ -2,6 +2,9 @@ from flask import Flask, request, render_template, redirect, url_for, flash
 from pymongo.mongo_client import MongoClient
 from dotenv import load_dotenv
 from werkzeug.utils import secure_filename #allowing file uploads
+import flask_login
+
+
 
 "i want to get environment variables from my .env"
 from dotenv import find_dotenv, load_dotenv
@@ -30,6 +33,12 @@ except Exception as e:
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
+login_manager = flask_login.LoginManager()
+
+login_manager.init_app(app)
+
+
+
 # Mock dataset of internships - will be deleted once MongoDB database is active
 internships = [
     {
@@ -52,6 +61,9 @@ internships = [
     },
 ]
 
+# Mock Login Data.
+users = {'foo@bar.tld': {'password': 'secret'}}
+
 # Mock user profile data - will be deleted once MongoDB database is active
 user_profile = {
     'photo': '/path/to/photo.jpg', 
@@ -66,6 +78,30 @@ user_profile = {
     'major': 'Computer Science'
 }
 
+class User(flask_login.UserMixin):
+    pass
+
+@login_manager.user_loader
+def user_loader(email):
+    if email not in users:
+        return
+
+    user = User()
+    user.id = email
+    return user
+
+
+@login_manager.request_loader
+def request_loader(request):
+    email = request.form.get('email')
+    if email not in users:
+        return
+
+    user = User()
+    user.id = email
+    return user
+
+
 @app.route('/', methods=['GET', 'POST'])
 def login():
     error = None
@@ -74,7 +110,10 @@ def login():
         password = request.form['password']
         action = request.form['action']
         
-        if action == 'signin' and email == 'admin@example.com' and password == 'admin':
+        if action == 'signin' and email in users and password == users[email]['password']:
+            user = User()
+            user.id = email
+            flask_login.login_user(user)
             # Redirect to the home page upon successful login - need database interaction added
             return redirect(url_for('search'))
         elif action == 'signup':
@@ -155,6 +194,15 @@ def chat():
 @app.route('/profile')
 def profile():
     return render_template('profile.html', profile=user_profile)
+
+@app.route('/logout')
+def logout():
+    flask_login.logout_user()
+    return 'Logged out'
+
+@login_manager.unauthorized_handler
+def unauthorized_handler():
+    return 'Unauthorized', 401
 
 if __name__ == '__main__':
     app.run(debug=True)
