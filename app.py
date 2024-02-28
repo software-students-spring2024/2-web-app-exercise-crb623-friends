@@ -1,11 +1,38 @@
 from flask import Flask, request, render_template, redirect, url_for, flash
+from pymongo.mongo_client import MongoClient
+from dotenv import load_dotenv
+from werkzeug.utils import secure_filename #allowing file uploads
 import flask_login
 
 
 
-app = Flask(__name__)
-app.secret_key = 'your_secret_key'
+"i want to get environment variables from my .env"
+from dotenv import find_dotenv, load_dotenv
+import os
+from dotenv import load_dotenv
 
+load_dotenv()
+
+DB_USER = os.getenv("DB_USER")
+DB_PASSWORD = os.getenv("DB_PASSWORD")
+DB_HOST = os.getenv("DB_HOST")
+
+UPLOAD_FOLDER = 'resumes'
+ALLOWED_EXTENSIONS = {'pdf', 'doc', 'docx'}
+
+uri = f"mongodb+srv://{DB_USER}:{DB_PASSWORD}@{DB_HOST}/?retryWrites=true&w=majority&appName=Cluster0&tlsAllowInvalidCertificates=true"
+client = MongoClient(uri)
+try:
+    client.admin.command('ping')
+    print('Connected to the database')
+except Exception as e:
+    print(e)
+    print('Unable to connect to the database')    
+
+#Initialize the application
+app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 login_manager = flask_login.LoginManager()
 
 login_manager.init_app(app)
@@ -125,9 +152,26 @@ def apply(internship_id):
     if request.method == 'POST':
         flash('Application submitted successfully!', 'success')
         return redirect(url_for('applications')) 
-    
+    application = {
+            'name': name,
+            'email': email,
+            'date_applied': datetime.utcnow(),
+            'resume': resume,
+            'cover_letter': cover_letter,
+            'status': 'Pending'  # Initial status of the application
+        }
+        # Add the application to the database
+    try:
+            db.applications.insert_one(application)
+            flash('Application submitted successfully!', 'success')
+            return redirect(url_for('applications'))
+    except Exception as e:
+            flash('An error occurred while submitting the application.', 'error')
+            print(e)
+            return redirect(url_for('apply', internship_id=internship_id)) 
     return render_template('apply.html', internship=internship)
-
+ 
+        
 
 @app.route('/applications')
 def applications():
