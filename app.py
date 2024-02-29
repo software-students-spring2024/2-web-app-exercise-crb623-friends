@@ -1,5 +1,8 @@
 from flask import Flask, request, render_template, redirect, url_for, flash
+from flask_pymongo import PyMongo
 import flask_login
+from werkzeug.security import generate_password_hash, check_password_hash
+
 
 
 
@@ -9,6 +12,10 @@ app.secret_key = 'your_secret_key'
 login_manager = flask_login.LoginManager()
 
 login_manager.init_app(app)
+
+# Set up MongoDB with PyMongo
+app.config["MONGO_URI"] = "mongodb+srv://teammate:teammate@cluster0.dnhpnsb.mongodb.net/internships?retryWrites=true&w=majority&appName=Cluster0"
+mongo = PyMongo(app)
 
 
 
@@ -82,8 +89,10 @@ def login():
         email = request.form['email']
         password = request.form['password']
         action = request.form['action']
-        
-        if action == 'signin' and email in users and password == users[email]['password']:
+        accounts = mongo.db.login
+        results = accounts.find_one({'email' : email})
+
+        if action == 'signin' and results and check_password_hash(results['password'], password):
             user = User()
             user.id = email
             flask_login.login_user(user)
@@ -101,8 +110,14 @@ def register():
         name = request.form['name']
         email = request.form['email']
         password = request.form['password']
-        flash('Registration successful!', 'success')
-        return redirect(url_for('search')) 
+        accounts = mongo.db.login
+        existing_user = accounts.find_one({'email' : email})
+        if existing_user is None:
+            hash_pass = generate_password_hash(password)
+            accounts.insert_one({'email' : email, 'password' : hash_pass, 'name' : name})
+            flash('Registration successful!', 'success')
+            return redirect(url_for('search')) 
+        return 'That email already exists!'
     return render_template('register.html')
 
 @app.route('/search', methods=['GET', 'POST'])
