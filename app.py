@@ -1,11 +1,12 @@
 from flask import Flask, request, render_template, redirect, url_for, flash
-from flask_pymongo import PyMongo
+from bson.objectid import ObjectId
 from pymongo.mongo_client import MongoClient
 from dotenv import find_dotenv, load_dotenv
 import os
 from werkzeug.utils import secure_filename  # allowing file uploads
+from werkzeug.security import generate_password_hash, check_password_hash
 import flask_login
-from flask_pymongo import PyMongo
+
 
 
 
@@ -39,13 +40,6 @@ app.config["MAX_CONTENT_LENGTH"] = 16 * 1024 * 1024
 login_manager = flask_login.LoginManager()
 
 login_manager.init_app(app)
-
-#OLD DB INTEGRATION
-# # Set up MongoDB with PyMongo
-# app.config["MONGO_URI"] = "mongodb+srv://teammate:teammate@cluster0.dnhpnsb.mongodb.net/internships?retryWrites=true&w=majority&appName=Cluster0"
-# mongo = PyMongo(app)
-
-
 
 # Mock Login Data.
 users = {"foo@bar.tld": {"password": "secret"}}
@@ -97,8 +91,8 @@ def login():
         email = request.form['email']
         password = request.form['password']
         action = request.form['action']
-        accounts = mongo.db.login
-        results = accounts.find_one({'email' : email})
+        
+        results = internships_collection.find_one({'email' : email})
 
         if action == 'signin' and results and check_password_hash(results['password'], password):
             user = User()
@@ -119,11 +113,10 @@ def register():
         name = request.form['name']
         email = request.form['email']
         password = request.form['password']
-        accounts = mongo.db.login
-        existing_user = accounts.find_one({'email' : email})
+        existing_user = internships_collection.find_one({'email' : email})
         if existing_user is None:
             hash_pass = generate_password_hash(password)
-            accounts.insert_one({'email' : email, 'password' : hash_pass, 'name' : name})
+            internships_collection.insert_one({'email' : email, 'password' : hash_pass, 'name' : name})
             flash('Registration successful!', 'success')
             return redirect(url_for('search')) 
         return 'That email already exists!'
