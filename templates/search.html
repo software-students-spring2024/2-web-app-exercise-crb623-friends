@@ -73,9 +73,12 @@
 </head>
 <body>
     <div class="banner">Search Internships</div>
+    <!-- Search Bar Form -->
     <div class="search-bar">
-        <input type="text" placeholder="Search internships...">
-        <button>Search</button>
+        <form action="/search" method="get"> <!-- Make sure the action matches your Flask route for searching -->
+            <input type="text" name="query" placeholder="Search internships..." value="{{ request.args.get('query', '') }}">
+            <button type="submit">Search</button>
+        </form>
     </div>
     <div class="internship-list">
         {% for internship in internships %}
@@ -86,12 +89,14 @@
                     <p>Location: {{ internship.location }}</p>
                     <p>Duration: {{ internship.duration }}</p>
                     <p>{{ internship.description }}</p>
-                    <button onclick="location.href='/apply/{{ internship.id }}'" class="apply-button">Click to Apply</button>
+                    <button onclick="location.href='/apply/{{ internship._id|string }}'" class="apply-button">Click to Apply</button>
+
                 </div>
                 <div class="clear"></div>
             </div>
         {% endfor %}
-    </div>    
+        
+    </div>  
     <div class="footer">
         <a href="/search">Search</a>
         <a href="/applications">Applications</a>
