@@ -120,16 +120,19 @@ def register():
 
 @app.route("/search")
 def search():
+
     query = request.args.get("query", "")
-    
+
     if query:
-        internships = internships_collection.find({"title": {"$regex": query, "$options": "i"}})
-        
+        internships = internships_collection.find(
+            {"title": {"$regex": query, "$options": "i"}}
+        )
+
     else:
-        
+
         internships = internships_collection.find()
-         
-        internship_list = list(internships)
+
+    internship_list = list(internships)
     return render_template("search.html", internships=internship_list)
 
 
