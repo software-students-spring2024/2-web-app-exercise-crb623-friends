@@ -64,7 +64,18 @@
 <body>
     <div class="banner">Current Applications</div>
     <div class="filter-bar">
-        <button class="filter-button">Filter</button>
+        <form action= "/applications" method= "get">
+            <label for="sort">Sort by title:</label>
+            <select name="sort" id="sort">
+                <option value="">ALL</option>
+                <option value="pending">Ascending</option>
+                <option value="reviewed">Decending</option>
+            </select>     
+         <button type="submit" class="filter-button">Filter</button>
+
+        
+                
+    
     </div>
     <div class="applications-list">
         <div class="application-item">

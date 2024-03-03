@@ -179,11 +179,9 @@ def submit_application(internship_id):
 def application_submitted():
     return render_template("application_submitted.html")
 
-
-@app.route("/applications")
-def applications():
-    # Mock data until MongoDB database implemented
-    user_applications = [
+# Mock data until MongoDB database implemented
+user_applications = [
+        
         {
             "logo": "path_to_logo.jpg",
             "title": "Software Development Intern",
@@ -192,8 +190,27 @@ def applications():
             "date_applied": "2024-01-01",
         },
     ]
-    return render_template("applications.html", applications=user_applications)
+    
+@app.route("/applications", methods=["GET"])
 
+def applications():
+    
+    sort=request.args.get("sort", "")
+    
+    #Filter applications alphabetically 
+    
+    if sort =="ascending":
+        sort_applications = sorted(user_applications, key= lambda x: x["title"])
+        
+    elif sort =="descending":
+        sort_applications = sorted(user_applications, key= lambda x: x["title"], reverse=True)
+        
+    else:
+        sort_applications = user_applications
+    
+    
+    return render_template("applications.html", applications=user_applications)
+    
 
 @app.route("/chat")
 def chat():
