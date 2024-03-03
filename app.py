@@ -35,6 +35,7 @@ except Exception as e:
 
 # Initialize the application
 app = Flask(__name__)
+app.secret_key = 'your_secret_key'
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 app.config["MAX_CONTENT_LENGTH"] = 16 * 1024 * 1024
 login_manager = flask_login.LoginManager()
