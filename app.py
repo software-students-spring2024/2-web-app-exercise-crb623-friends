@@ -1,14 +1,13 @@
 from flask import Flask, request, render_template, redirect, url_for, flash
+from bson.objectid import ObjectId
 from pymongo import MongoClient
 from dotenv import find_dotenv, load_dotenv
 import os
 from werkzeug.utils import secure_filename  # allowing file uploads
+from werkzeug.security import generate_password_hash, check_password_hash
 import flask_login
-from bson.objectid import ObjectId
-
 
 "i want to get environment variables from my .env"
-
 
 load_dotenv()
 
@@ -19,10 +18,12 @@ DB_HOST = os.getenv("DB_HOST")
 UPLOAD_FOLDER = "resumes"
 ALLOWED_EXTENSIONS = {"pdf", "doc", "docx"}
 
+# Database Initialization
 uri = f"mongodb+srv://{DB_USER}:{DB_PASSWORD}@{DB_HOST}/?retryWrites=true&w=majority&appName=Cluster0&tlsAllowInvalidCertificates=true"
 client = MongoClient(uri)
 db = client.get_database("internships")
 internships_collection = db.get_collection("internships")  # Collection for internships
+user_collection = db.get_collection("users")  # Collection for users
 try:
     client.admin.command("ping")
     print("Connected to the database")
@@ -32,15 +33,13 @@ except Exception as e:
 
 # Initialize the application
 app = Flask(__name__)
+app.secret_key = 'your_secret_key'
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 app.config["MAX_CONTENT_LENGTH"] = 16 * 1024 * 1024
+
+# Initialize the login manager
 login_manager = flask_login.LoginManager()
-
 login_manager.init_app(app)
-
-
-# Mock Login Data.
-users = {"foo@bar.tld": {"password": "secret"}}
 
 # Mock user profile data - will be deleted once MongoDB database is active
 user_profile = {
@@ -60,45 +59,47 @@ user_profile = {
 class User(flask_login.UserMixin):
     pass
 
-
+# Loads user from current session
 @login_manager.user_loader
 def user_loader(email):
-    if email not in users:
+    results = user_collection.find_one({'email' : email})
+    if not results:
         return
 
     user = User()
     user.id = email
     return user
 
-
+# Loads user from flask request
 @login_manager.request_loader
 def request_loader(request):
     email = request.form.get("email")
-    if email not in users:
+    results = user_collection.find_one({'email' : email})
+    if not results:
         return
 
     user = User()
     user.id = email
     return user
 
-
+# The route for the log-in page
 @app.route("/", methods=["GET", "POST"])
 def login():
     error = None
-    if request.method == "POST":
-        email = request.form["email"]
-        password = request.form["password"]
-        action = request.form["action"]
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+        action = request.form['action']
+        
+        # Attempts to find a DB entry from the Mongo Database
+        results = user_collection.find_one({'email' : email})
 
-        if (
-            action == "signin"
-            and email in users
-            and password == users[email]["password"]
-        ):
+        # Checks to see if user is already is in the databse
+        if action == 'signin' and results and check_password_hash(results['password'], password):
             user = User()
             user.id = email
             flask_login.login_user(user)
-            # Redirect to the home page upon successful login - need database interaction added
+            # Redirect to the home page upon successful login
             return redirect(url_for("search"))
         elif action == "signup":
             return redirect(url_for("register"))
@@ -109,14 +110,19 @@ def login():
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
-    if request.method == "POST":
-        name = request.form["name"]
-        email = request.form["email"]
-        password = request.form["password"]
-        flash("Registration successful!", "success")
-        return redirect(url_for("search"))
-    return render_template("register.html")
-
+    if request.method == 'POST':
+        name = request.form['name']
+        email = request.form['email']
+        password = request.form['password']
+        existing_user = user_collection.find_one({'email' : email})
+        # Adds a Database entry if the user isn't already registered
+        if existing_user is None:
+            hash_pass = generate_password_hash(password)
+            user_collection.insert_one({'email' : email, 'password' : hash_pass, 'name' : name})
+            flash('Registration successful!', 'success')
+            return redirect(url_for('search')) 
+        return 'That email already exists!'
+    return render_template('register.html')
 
 @app.route("/search")
 def search():
