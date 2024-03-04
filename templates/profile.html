@@ -17,9 +17,14 @@
         .profile-header {
             background-color: #f2f2f2;
             width: 100%;
-            text-align: center;
             padding: 10px 0;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+        }
+        .profile-text {
             font-size: 24px;
+            margin-left: 46%;
         }
         .profile-container {
             display: flex;
@@ -35,6 +40,7 @@
             cursor: pointer;
             margin-top: 10px;
         }
+        
         .profile-info {
             width: 90%; 
             margin: 20px 0;
@@ -98,7 +104,10 @@
     </style>
 </head>
 <body>
-    <div class="profile-header">Profile</div>
+    <div class="profile-header">
+        <div class="profile-text">Profile</div>
+        <button onclick="location.href='/logout'" class="logout-btn">Logout</button>
+    </div>
     <div class="profile-container">
         <div class="profile-photo">Photo</div>
         <button class="edit-btn">Edit Profile</button>
