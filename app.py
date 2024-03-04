@@ -128,18 +128,23 @@ def register():
 def search():
 
     query = request.args.get("query", "")
-
-    if query:
-        internships = internships_collection.find(
-            {"title": {"$regex": query, "$options": "i"}}
-        )
-
-    else:
-
-        internships = internships_collection.find()
-
+    
+    #criteria fields for search
+    
+    criteria = ["title", "location", "company_name", "duration"]
+    
+    #list of regular expression quries 
+    criteria_list = [{"$regex": f"{query}", "$options": "i"} for _ in criteria]
+    
+       
+    search_query = {"$or": [{field: query} for field, query in zip(criteria, criteria_list)]}
+     
+    # Perform Search based on the query by the user 
+    internships = internships_collection.find(search_query)
+        
     internship_list = list(internships)
-    return render_template("search.html", internships=internship_list)
+    
+    return render_template("search.html", internships=internship_list, query=query)
 
 
 def allowed_file(filename):
