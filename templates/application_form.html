@@ -50,7 +50,9 @@
     </div>
 
     <div class="application-form">
-        <form action="{{ url_for('submit_application', internship_id=internship._id) }}" method="POST" enctype="multipart/form-data">
+        <!-- the route works fine , getting to the template -> need to use data
+        from internship to construct url that form posts to -->
+        <form action="{{ url_for('show_apply_form', internship_id=internship.id) }}" method="POST" enctype="multipart/form-data">
             <label for="name">Your Name:</label>
             <input type="text" id="name" name="name" required>
 

@@ -33,7 +33,7 @@ except Exception as e:
 
 # Initialize the application
 app = Flask(__name__)
-app.secret_key = 'your_secret_key'
+app.secret_key = '232323112@@11'
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 app.config["MAX_CONTENT_LENGTH"] = 16 * 1024 * 1024
 
@@ -55,6 +55,7 @@ user_profile = {
     "major": "Computer Science",
 }
 
+print(f"123 {internships_collection}")
 
 class User(flask_login.UserMixin):
     pass
@@ -151,39 +152,26 @@ def allowed_file(filename):
     return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
-@app.route("/apply/<internship_id>", methods=["GET"])
+@app.route("/apply/<internship_id>", methods=["GET" , "POST"])
 def show_apply_form(internship_id):
     # Convert the string ID from the URL to an ObjectId
-    print(f"Internship ID: {internship_id}")
-    internship_id_obj = ObjectId(internship_id)
-    print(f"Internship ID Object: {internship_id_obj}")
-
-    # Use the ObjectId to query the database
-    internship = internships_collection.find_one({"_id": (internship_id_obj)})
-    print(internship)
-
-    return render_template(
-        "application_form.html", internship=internship, internship_id=internship_id
-    )
-
-
-@app.route("/apply/<int:internship_id>", methods=["POST"])
-def submit_application(internship_id):
-    name = request.form["name"]
-    email = request.form["email"]
-    cover_letter = request.form["cover_letter"]
-    resume = request.files["resume"]
-
-    # Process the resume file (save it, analyze it, etc.)
-    # For example, saving the resume file:
-    if resume and allowed_file(resume.filename):
-        filename = secure_filename(resume.filename)
-        resume.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
-
-    # Save the application details to the database or process them as needed
-
-    # Redirect to a confirmation page or back to the listings with a success message
-    return redirect(url_for("application_submitted"))
+    if request.method == "POST":
+        name = request.form["name"]
+        email = request.form["email"]
+        cover_letter = request.form["cover_letter"]
+        resume = request.files["resume"]
+        applications_collection.insert_one({
+            "internship_id": ObjectId(internship_id),
+            "name": name,
+            "email": email,
+            "cover_letter": cover_letter,
+            "resume": resume.read()
+        })
+        return redirect(url_for("submit_application", internship_id=internship_id))
+    else:
+        internship_id_obj = ObjectId(internship_id)
+        internship = internships_collection.find_one({"_id": (internship_id_obj)})
+        return render_template('application_form.html' , internship=internship)
 
 
 @app.route("/application-submitted")
