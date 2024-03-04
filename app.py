@@ -23,6 +23,7 @@ uri = f"mongodb+srv://{DB_USER}:{DB_PASSWORD}@{DB_HOST}/?retryWrites=true&w=majo
 client = MongoClient(uri)
 db = client.get_database("internships")
 internships_collection = db.get_collection("internships")  # Collection for internships
+user_collection = db.get_collection("users")  # Collection for users
 try:
     client.admin.command("ping")
     print("Connected to the database")
@@ -61,7 +62,7 @@ class User(flask_login.UserMixin):
 # Loads user from current session
 @login_manager.user_loader
 def user_loader(email):
-    results = internships_collection.find_one({'email' : email})
+    results = user_collection.find_one({'email' : email})
     if not results:
         return
 
@@ -73,7 +74,7 @@ def user_loader(email):
 @login_manager.request_loader
 def request_loader(request):
     email = request.form.get("email")
-    results = internships_collection.find_one({'email' : email})
+    results = user_collection.find_one({'email' : email})
     if not results:
         return
 
@@ -91,7 +92,7 @@ def login():
         action = request.form['action']
         
         # Attempts to find a DB entry from the Mongo Database
-        results = internships_collection.find_one({'email' : email})
+        results = user_collection.find_one({'email' : email})
 
         # Checks to see if user is already is in the databse
         if action == 'signin' and results and check_password_hash(results['password'], password):
@@ -113,11 +114,11 @@ def register():
         name = request.form['name']
         email = request.form['email']
         password = request.form['password']
-        existing_user = internships_collection.find_one({'email' : email})
+        existing_user = user_collection.find_one({'email' : email})
         # Adds a Database entry if the user isn't already registered
         if existing_user is None:
             hash_pass = generate_password_hash(password)
-            internships_collection.insert_one({'email' : email, 'password' : hash_pass, 'name' : name})
+            user_collection.insert_one({'email' : email, 'password' : hash_pass, 'name' : name})
             flash('Registration successful!', 'success')
             return redirect(url_for('search')) 
         return 'That email already exists!'
