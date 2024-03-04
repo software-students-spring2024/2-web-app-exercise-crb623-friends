@@ -98,17 +98,22 @@
     </style>
 </head>
 <body>
-    <div class="profile-header">Profile</div>
-    <div class="profile-container">
+    <div class="profile-header">Edit Profile</div>
+    <form method="post" action="/profile/edit" class="profile-container">
         <div class="profile-photo">Photo</div>
-        <a href="{{url_for('edit_profile')}}" class="edit-btn">Edit Profile</a>
-    </div>
-    <div class="profile-info">
-        <div class="info-field"><span class="info-label">Name:</span> <span>User Name</span></div>
-        <div class="info-field"><span class="info-label">University & Major:</span> <span>University, Major</span></div>
-        <div class="info-field"><span class="info-label">Email:</span> <span>user@example.com</span></div>
-        <div class="info-field"><span class="info-label">LinkedIn:</span> <span>linkedin.com/in/username</span></div>
-        <div class="info-field"><span class="info-label">Portfolio:</span> <span>portfolio.com/username</span></div>
+        <label for="name">Name:</label>
+        <input type= "text" id="name" name="name" value="{{profile.name}}" required>
+        <label for="name">Name:</label>
+        <input type= "text" id="name" name="name" value="{{profile.name}}" required>
+        <label for="name">Name:</label>
+        <input type= "text" id="name" name="name" value="{{profile.name}}" required>
+        <label for="name">Name:</label>
+        <input type= "text" id="name" name="name" value="{{profile.name}}" required>
+        <label for="name">Name:</label>
+        <input type= "text" id="name" name="name" value="{{profile.name}}" required>
+
+
+        <button type="submit" class="edit-btn">Save Changes</button>
     </div>
     <div class="footer">
         <a href="/search">Search</a>

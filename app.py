@@ -6,6 +6,7 @@ import os
 from werkzeug.utils import secure_filename  # allowing file uploads
 from werkzeug.security import generate_password_hash, check_password_hash
 import flask_login
+from flask_login import current_user
 
 "i want to get environment variables from my .env"
 
@@ -16,7 +17,9 @@ DB_PASSWORD = os.getenv("DB_PASSWORD")
 DB_HOST = os.getenv("DB_HOST")
 
 UPLOAD_FOLDER = "resumes"
-ALLOWED_EXTENSIONS = {"pdf", "doc", "docx"}
+ALLOWED_EXTENSIONS = {"pdf", "doc", "docx", "png" , "jpeg"}
+
+
 
 # Database Initialization
 uri = f"mongodb+srv://{DB_USER}:{DB_PASSWORD}@{DB_HOST}/?retryWrites=true&w=majority&appName=Cluster0&tlsAllowInvalidCertificates=true"
@@ -217,8 +220,54 @@ def chat():
 
 
 @app.route("/profile")
+
+
 def profile():
     return render_template("profile.html", profile=user_profile)
+
+@app.route("/profile/edit", methods = ["GET", "POST"])
+
+
+def edit_profile():
+
+    if request.method == "POST":
+        
+        name=request.form.get("name")
+        university_major=request.form.get("university_major")
+        email=request.form.get("email")
+        linkedin=request.form.get("linkedin")
+        portfolio=request.form.get("portfolio")
+
+
+    if "photo" in request.files:
+        photo = request.files["photo"] 
+           # Process the photo file (save it, analyze it, etc.)
+    # For example, saving the photo file:
+        if photo and allowed_file(photo.filename):
+         filename = secure_filename(photo.filename)
+        photo.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
+        
+       
+    user_collection.update_one(
+        {"email": current_user.id},
+        {
+            set:{
+                "photo": os.path.join(app.config["UPLOAD_FOLDER"], filename),
+                "name": name,
+                "university_major": university_major,
+                "email": email,
+                "linkedin":linkedin,
+                "portfolio": portfolio
+            }
+        },
+    )
+    
+    flash("Profile Updated!", "success")
+    
+    return redirect(url_for("profile"))
+    return render_template("edit_profile.html", profile=user_profile)
+
+
 
 
 @app.route("/logout")
