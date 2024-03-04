@@ -24,6 +24,7 @@ client = MongoClient(uri)
 db = client.get_database("internships")
 internships_collection = db.get_collection("internships")  # Collection for internships
 user_collection = db.get_collection("users")  # Collection for users
+applications_collection = db.get_collection("applications")  # Collection for applications
 try:
     client.admin.command("ping")
     print("Connected to the database")
@@ -54,8 +55,6 @@ user_profile = {
     "university": "University of Technology",
     "major": "Computer Science",
 }
-
-print(f"123 {internships_collection}")
 
 class User(flask_login.UserMixin):
     pass
@@ -167,7 +166,8 @@ def show_apply_form(internship_id):
             "cover_letter": cover_letter,
             "resume": resume.read()
         })
-        return redirect(url_for("submit_application", internship_id=internship_id))
+        return render_template("success_page.html", message="Application submitted successfully!")
+
     else:
         internship_id_obj = ObjectId(internship_id)
         internship = internships_collection.find_one({"_id": (internship_id_obj)})
