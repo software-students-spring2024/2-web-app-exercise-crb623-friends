@@ -22,6 +22,7 @@
             flex-direction: row;
             justify-content: space-between;
         }
+        
         .profile-text {
             font-size: 24px;
             margin-left: 46%;
@@ -31,15 +32,30 @@
             flex-direction: column;
             align-items: center;
         }
-        .edit-btn {
-            padding: 5px 10px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 10px;
-        }
+        .profile-buttons {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        max-width: 200px; 
+        margin: 0 auto;
+    }
+
+    .edit-btn, .delete-btn {
+        
+        padding: 5px 10px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 10px;
+        text-decoration: none; 
+    }
+
+    .delete-btn {
+        background-color: #f44336; 
+    }
         
         .profile-info {
             width: 90%; 
@@ -101,23 +117,44 @@
                 flex-direction: column;
             }
         }
+        
     </style>
 </head>
 <body>
     <div class="profile-header">
         <div class="profile-text">Profile</div>
-        <button onclick="location.href='/logout'" class="logout-btn">Logout</button>
+        
     </div>
+    
     <div class="profile-container">
         <div class="profile-photo">Photo</div>
         <a href="{{url_for('edit_profile')}}" class="edit-btn">Edit Profile</a>
+        <form action="{{ url_for('delete_profile') }}" method="POST" class="delete-form">
+            <button type="submit" class="delete-btn">Delete Profile</button>
+        </form>
     </div>
+    
     <div class="profile-info">
-        <div class="info-field"><span class="info-label">Name:</span> <span>User Name</span></div>
-        <div class="info-field"><span class="info-label">University & Major:</span> <span>University, Major</span></div>
-        <div class="info-field"><span class="info-label">Email:</span> <span>user@example.com</span></div>
-        <div class="info-field"><span class="info-label">LinkedIn:</span> <span>linkedin.com/in/username</span></div>
-        <div class="info-field"><span class="info-label">Portfolio:</span> <span>portfolio.com/username</span></div>
+        <div class="info-field">
+            <span class="info-label">Name:</span>
+            <span>{{ profile.name }}</span>
+        </div>
+        <div class="info-field">
+            <span class="info-label">University & Major:</span>
+            <span>{{ profile.university_major }}</span>
+        </div>
+        <div class="info-field">
+            <span class="info-label">Email:</span>
+            <span>{{ profile.email }}</span>
+        </div>
+        <div class="info-field">
+            <span class="info-label">LinkedIn:</span>
+            <span><a href="{{ profile.linkedin }}">{{ profile.linkedin }}</a></span>
+        </div>
+        <div class="info-field">
+            <span class="info-label">Portfolio:</span>
+            <span><a href="{{ profile.portfolio }}">{{ profile.portfolio }}</a></span>
+        </div>
     </div>
     <div class="footer">
         <a href="/search">Search</a>

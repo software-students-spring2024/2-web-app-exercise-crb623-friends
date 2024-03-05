@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,6 +15,7 @@
             min-height: 100vh;
             align-items: center;
         }
+
         .profile-header {
             background-color: #f2f2f2;
             width: 100%;
@@ -21,11 +23,13 @@
             padding: 10px 0;
             font-size: 24px;
         }
+
         .profile-container {
             display: flex;
             flex-direction: column;
             align-items: center;
         }
+
         .edit-btn {
             padding: 5px 10px;
             background-color: #4CAF50;
@@ -35,10 +39,12 @@
             cursor: pointer;
             margin-top: 10px;
         }
+
         .profile-info {
-            width: 90%; 
+            width: 90%;
             margin: 20px 0;
         }
+
         .profile-photo {
             width: 100px;
             height: 100px;
@@ -50,6 +56,7 @@
             align-items: center;
             font-size: 16px;
         }
+
         .info-field {
             background-color: #f0f0f0;
             padding: 10px;
@@ -58,16 +65,20 @@
             flex-direction: column;
             align-items: start;
         }
+
         .info-label {
             font-weight: bold;
             margin-bottom: 5px;
         }
-        .profile-container, .profile-info {
+
+        .profile-container,
+        .profile-info {
             flex: 1;
         }
+
         .footer {
             width: 100%;
-            position: static;
+            position: fixed;
             bottom: 0;
             display: flex;
             justify-content: space-around;
@@ -78,48 +89,65 @@
         .footer a {
             text-decoration: none;
             color: black;
-            font-size: 14px;
         }
+
         @media screen and (max-width: 600px) {
-            .profile-header, .profile-info, .footer {
+
+            .profile-header,
+            .profile-info,
+            .footer {
                 padding: 10px;
             }
+
             .profile-header {
                 font-size: 20px;
             }
+
             .edit-btn {
                 padding: 5px;
                 font-size: 14px;
             }
+
             .info-field {
                 flex-direction: column;
             }
         }
     </style>
 </head>
+
 <body>
     <div class="profile-header">Edit Profile</div>
     <form method="post" action="/profile/edit" class="profile-container">
         <div class="profile-photo">Photo</div>
+        <!-- Name -->
         <label for="name">Name:</label>
-        <input type= "text" id="name" name="name" value="{{profile.name}}" required>
-        <label for="name">Name:</label>
-        <input type= "text" id="name" name="name" value="{{profile.name}}" required>
-        <label for="name">Name:</label>
-        <input type= "text" id="name" name="name" value="{{profile.name}}" required>
-        <label for="name">Name:</label>
-        <input type= "text" id="name" name="name" value="{{profile.name}}" required>
-        <label for="name">Name:</label>
-        <input type= "text" id="name" name="name" value="{{profile.name}}" required>
-
-
+        <input type="text" id="name" name="name" value="{{ profile.name }}" required>
+    
+        <!-- University Major -->
+        <label for="university_major">University Major:</label>
+        <input type="text" id="university_major" name="university_major" value="{{ profile.university_major }}" required>
+    
+        <!-- Email -->
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" value="{{ profile.email }}" required>
+    
+        <!-- LinkedIn -->
+        <label for="linkedin">LinkedIn:</label>
+        <input type="text" id="linkedin" name="linkedin" value="{{ profile.linkedin }}" required>
+    
+        <!-- Portfolio -->
+        <label for="portfolio">Portfolio:</label>
+        <input type="text" id="portfolio" name="portfolio" value="{{ profile.portfolio }}" required>
+    
         <button type="submit" class="edit-btn">Save Changes</button>
-    </div>
-    <div class="footer">
-        <a href="/search">Search</a>
-        <a href="/applications">Applications</a>
-        <a href="/chat">Chat</a>
-        <a href="/profile">Profile</a>
-    </div>
+    </form>
+        </div>
+        <div class="footer">
+            <a href="/search">Search</a>
+            <a href="/applications">Applications</a>
+            <a href="/chat">Chat</a>
+            <a href="/profile">Profile</a>
+        </div>
 </body>
+
 </html>

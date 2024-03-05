@@ -6,7 +6,9 @@ import os
 from werkzeug.utils import secure_filename  # allowing file uploads
 from werkzeug.security import generate_password_hash, check_password_hash
 import flask_login
-from flask_login import current_user
+from flask_login import current_user , login_required
+
+
 
 "i want to get environment variables from my .env"
 
@@ -59,8 +61,11 @@ user_profile = {
     "major": "Computer Science",
 }
 
+
 class User(flask_login.UserMixin):
-    pass
+    def __init__(self, id):
+        self.id = id
+        self.profile = {}
 
 # Loads user from current session
 @login_manager.user_loader
@@ -69,8 +74,8 @@ def user_loader(email):
     if not results:
         return
 
-    user = User()
-    user.id = email
+    user = User(email)
+    user.profile = results
     return user
 
 # Loads user from flask request
@@ -99,7 +104,7 @@ def login():
 
         # Checks to see if user is already is in the databse
         if action == 'signin' and results and check_password_hash(results['password'], password):
-            user = User()
+            user = User(email) #passes email as id
             user.id = email
             flask_login.login_user(user)
             # Redirect to the home page upon successful login
@@ -109,7 +114,6 @@ def login():
         else:
             error = "Invalid credentials"
     return render_template("login.html", error=error)
-
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -220,54 +224,59 @@ def chat():
 
 
 @app.route("/profile")
-
-
 def profile():
+    user_profile = user_collection.find_one({'email': current_user.id})
+    if user_profile is None:
+        # Handle the case where the user profile does not exist
+        return "User profile not found", 404
+    print(user_profile)
     return render_template("profile.html", profile=user_profile)
 
-@app.route("/profile/edit", methods = ["GET", "POST"])
 
 
+
+@app.route("/profile/edit", methods=["GET", "POST"])
+@login_required
 def edit_profile():
-
     if request.method == "POST":
-        
-        name=request.form.get("name")
-        university_major=request.form.get("university_major")
-        email=request.form.get("email")
-        linkedin=request.form.get("linkedin")
-        portfolio=request.form.get("portfolio")
+        # Handle file upload if a new photo is provided
+        if 'photo' in request.files:
+            file = request.files['photo']
+            if file and allowed_file(file.filename):
+                filename = secure_filename(file.filename)
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                photo_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            else:
+                flash('File type not allowed', 'danger')
+                return redirect(request.url)
+        else:
+            photo_path = None
 
-
-    if "photo" in request.files:
-        photo = request.files["photo"] 
-           # Process the photo file (save it, analyze it, etc.)
-    # For example, saving the photo file:
-        if photo and allowed_file(photo.filename):
-         filename = secure_filename(photo.filename)
-        photo.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
-        
-       
-    user_collection.update_one(
-        {"email": current_user.id},
-        {
-            set:{
-                "photo": os.path.join(app.config["UPLOAD_FOLDER"], filename),
-                "name": name,
-                "university_major": university_major,
-                "email": email,
-                "linkedin":linkedin,
-                "portfolio": portfolio
+        # Update the user's profile in the database
+        user_collection.update_one(
+            {"email": current_user.id},
+            {
+                "$set": {
+                    "name": request.form.get("name"),
+                    "university_major": request.form.get("university_major"),
+                    "email": request.form.get("email"),
+                    "linkedin": request.form.get("linkedin"),
+                    "portfolio": request.form.get("portfolio")
+                }
             }
-        },
-    )
-    
-    flash("Profile Updated!", "success")
-    
-    return redirect(url_for("profile"))
-    return render_template("edit_profile.html", profile=user_profile)
+        )
+        flash("Profile Updated!", "success")
+        return redirect(url_for("profile"))
+    else:
+        user_profile = user_collection.find_one({'email': current_user.id})
+        return render_template("edit_profile.html", profile=user_profile)
 
-
+@app.route("/profile/delete" , methods=["POST"])
+@login_required
+def delete_profile():
+     user_collection.delete_one({"email": current_user.id})
+     flask_login.logout_user()
+     return redirect(url_for("register"))
 
 
 @app.route("/logout")
